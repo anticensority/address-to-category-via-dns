@@ -8,14 +8,12 @@ import (
 	"bufio"
 	"os"
 	"strings"
-	"sort"
 	"runtime"
 	"strconv"
 	"io/ioutil"
 	"regexp"
 	"flag"
 
-	"text/template"
 	"encoding/json"
 
 	"net"
@@ -104,7 +102,7 @@ func main() {
 	if *ifForced == false {
 
 		response := getOrDie(REPO_URL + "/commits")
-		text, err := ioutil.ReadAll(response.Body)
+		text, err = ioutil.ReadAll(response.Body)
 		if err != nil {
 			panic(err)
 		}
@@ -113,7 +111,7 @@ func main() {
 		json.Unmarshal(text, commits)
 		lastUpdateMessage = (*commits)[0].Commit.Message
 	}
-	var newUpdateMessage string
+	//var newUpdateMessage string
 
 	updatedRegexp := regexp.MustCompile(`Updated: \d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d [+-]0000`)
 
@@ -129,7 +127,7 @@ func main() {
 			match := updatedRegexp.FindString(scanner.Text())
 			if match != "" {
 				if lastUpdateMessage < match {
-					newUpdateMessage = match
+					//newUpdateMessage = match
 					bestProvider = &provider
 					break
 				}
@@ -319,6 +317,7 @@ func main() {
 	runtime.GC()
 	fmt.Println("Pushing to Redis...")
   // TODO:
+  fmt.Println(ipv4subnetsKeys)
 
 	fmt.Println("Done.")
 }
