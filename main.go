@@ -10,11 +10,7 @@ import (
 	"strings"
 	"runtime"
 	"strconv"
-	"io/ioutil"
 	"regexp"
-	"flag"
-
-	"encoding/json"
 
 	"net"
 	"bytes"
@@ -24,8 +20,6 @@ import (
 	"golang.org/x/text/encoding/charmap"
 	"golang.org/x/net/idna"
 )
-
-var ifForced = flag.Bool("force", false, "If to ignore checking of an updated dump.csv available")
 
 type blockProvider struct {
 	urls []string
@@ -86,32 +80,11 @@ type GhCommits []struct{
 
 func main() {
 
-	GH_REPO := os.Getenv("GH_REPO")
-	GH_TOKEN := os.Getenv("GH_TOKEN")
-	if GH_REPO == "" || GH_TOKEN == "" {
-		panic("Provide GH_REPO and GH_TOKEN environment variables!")
-	}
-	REPO_URL := "https://api.github.com/repos/" + GH_REPO
 	var (
-		text []byte
 		response *http.Response
 		err error
 	)
-	lastUpdateMessage := ""
-	flag.Parse()
-	if *ifForced == false {
-
-		response := getOrDie(REPO_URL + "/commits")
-		text, err = ioutil.ReadAll(response.Body)
-		if err != nil {
-			panic(err)
-		}
-		response.Body.Close()
-		commits := &GhCommits{}
-		json.Unmarshal(text, commits)
-		lastUpdateMessage = (*commits)[0].Commit.Message
-	}
-	//var newUpdateMessage string
+  lastUpdateMessage := ""
 
 	updatedRegexp := regexp.MustCompile(`Updated: \d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d [+-]0000`)
 
@@ -127,7 +100,7 @@ func main() {
 			match := updatedRegexp.FindString(scanner.Text())
 			if match != "" {
 				if lastUpdateMessage < match {
-					//newUpdateMessage = match
+					lastUpdateMessage = match
 					bestProvider = &provider
 					break
 				}
