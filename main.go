@@ -19,6 +19,8 @@ import (
 	"golang.org/x/text/transform"
 	"golang.org/x/text/encoding/charmap"
 	"golang.org/x/net/idna"
+
+	"github.com/gomodule/redigo/redis"
 )
 
 type blockProvider struct {
@@ -52,7 +54,7 @@ var get = func (url string) (*http.Response, error) {
 
 	fmt.Println("GETting " + url)
 	response, err := http.Get(url)
-  fmt.Println("Got")
+	fmt.Println("Got")
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +86,7 @@ func main() {
 		response *http.Response
 		err error
 	)
-  lastUpdateMessage := ""
+	lastUpdateMessage := ""
 
 	updatedRegexp := regexp.MustCompile(`Updated: \d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d [+-]0000`)
 
@@ -164,14 +166,14 @@ func main() {
 
 	_, err = csvIn.ReadString('\n')
 	if err != nil {
-	  panic(err)
+		panic(err)
 	}
 
 	reader := csv.NewReader(transform.NewReader(csvIn, charmap.Windows1251.NewDecoder()))
 	reader.Comma = ';'
 	reader.FieldsPerRecord = 6
 	idna := idna.New()
-	hostnames   := map[string]bool{
+	hostnames := map[string]bool{
 		// Extremism:
 		"pravdabeslana.ru": true,
 		// WordPress:
@@ -289,8 +291,8 @@ func main() {
 	//hostnames = nil
 	runtime.GC()
 	fmt.Println("Pushing to Redis...")
-  // TODO:
-  fmt.Println(ipv4subnetsKeys)
+	// TODO:
+	fmt.Println(ipv4subnetsKeys)
 
 	fmt.Println("Done.")
 }
