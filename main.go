@@ -20,7 +20,7 @@ import (
 	"golang.org/x/text/encoding/charmap"
 	"golang.org/x/net/idna"
 
-	"github.com/gomodule/redigo/redis"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 type blockProvider struct {
@@ -81,6 +81,11 @@ type GhCommits []struct{
 }
 
 func main() {
+
+	REDIS_PASSWORD := os.Getenv("REDIS_PASSWORD")
+	if REDIS_PASSWORD == "" {
+		panic("Provide REDIS_PASSWORD environment variable! The secure way of providing it is by using .env file (e.g. see https://github.com/joho/godotenv).")
+	}
 
 	var (
 		response *http.Response
@@ -290,9 +295,8 @@ func main() {
 	ipv4subnets = nil
 	//hostnames = nil
 	runtime.GC()
-	fmt.Println("Pushing to Redis...")
-	// TODO:
 	fmt.Println(ipv4subnetsKeys)
+  // TODO: Connect to redis here.
 
 	fmt.Println("Done.")
 }
