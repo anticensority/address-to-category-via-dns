@@ -1,4 +1,4 @@
-package example
+package addrToCat
 
 import (
 	"testing"
@@ -9,7 +9,7 @@ import (
 // TestSetup tests the various things that should be parsed by setup.
 // Make sure you also test for parse errors.
 func TestSetup(t *testing.T) {
-	c := caddy.NewTestController("dns", `example`)
+	c := caddy.NewTestController("dns", `addr2cat`)
 	if err := setup(c); err != nil {
 		t.Fatalf("Expected no errors, but got: %v", err)
 	}

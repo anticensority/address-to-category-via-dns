@@ -1,4 +1,4 @@
-package example
+package addrToCat
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ import (
 
 func TestExample(t *testing.T) {
 	// Create a new Example Plugin. Use the test.ErrorHandler as the next plugin.
-	x := Example{Next: test.ErrorHandler()}
+	x := AddrToCat{Next: test.ErrorHandler()}
 
 	// Setup a new output buffer that is *not* standard output, so we can check if
 	// example is really being printed.
@@ -29,7 +29,7 @@ func TestExample(t *testing.T) {
 
 	// Call our plugin directly, and check the result.
 	x.ServeDNS(ctx, rec, r)
-	if a := b.String(); a != "example\n" {
-		t.Errorf("Failed to print '%s', got %s", example, a)
+	if a := b.String(); a != "addr2cat\n" {
+		t.Errorf("Failed to print '%s', got %s", addrToCat, a)
 	}
 }
