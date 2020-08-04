@@ -282,7 +282,7 @@ func Pull() *types.AddressToIntCat {
 		Ipv6: ipv6,
 		Ipv4Subnets: ipv4SubnetKeys,
 	}
-	fmt.Println(result)
+	fmt.Println(results)
 
 	ipv4Subnets = nil
 
